@@ -1,45 +1,133 @@
 # StructureMedic
 
-> Portable agent for identifying repositories with excessive root-level file accumulation.
+> A portable engineering agent for **project structure**.
 
-## What it does
+StructureMedic inspects observable project evidence, detects **excessive root-level files**, and produces an explainable improvement plan. Its purpose is not to replace specialist tooling. It provides a focused, auditable diagnostic layer that can travel across agent runtimes.
 
-StructureMedic examines the project tree and flags cases where many files live directly in the repository root. It recommends grouping related concerns into directories when the layout becomes difficult to navigate.
+## What makes it different
 
-### Diagnostic fingerprint
-
-**File distribution → organization signal → evidence → restructuring plan**
-
-## Why this agent is distinct
-
-StructureMedic evaluates organization rather than code correctness. A project can compile perfectly and still become difficult to navigate as the root grows.
-
-Its rule provides a simple, reproducible signal for that problem.
-
-## Workflow
+This project follows an **evidence → decision → explanation** model:
 
 ```text
-Project tree
-    ↓
-Path distribution analysis
-    ↓
-Structure rule
-    ↓
-Evidence
-    ↓
-Organization recommendation
+Project
+  ↓
+Scanner
+  ↓
+Domain Evidence
+  ↓
+Deterministic Diagnostic Rule
+  ↓
+Finding + Evidence + Confidence
+  ↓
+Improvement Plan
 ```
+
+The agent does not invent evidence. A finding is tied to what the scanner can actually observe.
+
+## Diagnostic contract
+
+| Layer | StructureMedic behavior |
+| --- | --- |
+| Domain | project structure |
+| Primary signal | root-level file organization |
+| Remediation | Group related files into meaningful directories |
+| Output | Structured, explainable findings |
+| Uncertainty | Explicitly constrained by available evidence |
+
+## Portable architecture
+
+```text
+                    ┌─────────────────────┐
+                    │   Portable Agent    │
+                    │ identity + behavior  │
+                    └──────────┬──────────┘
+                               │
+              ┌────────────────┼────────────────┐
+              ↓                ↓                ↓
+          Diagnostic        Duties &         Explainability
+            Logic           Workflow           Contract
+              │
+              ↓
+        Runtime Adapters
+       ┌──────┬──────┬──────┬──────┐
+       ↓      ↓      ↓      ↓
+    OpenAI  CrewAI  Claude  Lyzr
+```
+
+The core diagnostic logic is kept separate from framework-specific adapters. This is the central design idea of the project, not four copies of the same agent wearing different hats.
+
+## Repository structure
+
+```text
+agent.yaml          # Portable identity and passport metadata
+SOUL.md             # Identity, principles, and behavior
+AGENTS.md           # Agent responsibilities
+DUTIES.md           # Maker / Checker workflow
+EXPLAINABILITY.md   # Decision, inputs, limits, and evidence contract
+core/               # Shared result model
+tools/              # Scanner and domain diagnostics
+skills/             # Declared capabilities
+workflows/          # Agent workflows
+adapters/           # Runtime-facing adapters
+tests/              # Deliberately diagnostic project fixtures
+```
+
+## Passport portability
+
+The agent is structured for the OpenGAP passport model and can be exported to:
+
+- OpenAI Agents SDK
+- CrewAI
+- Claude Code
+- Lyzr
+
+The important part is the **portable contract**: identity, behavior, duties, explainability, tools, and skills remain defined independently of a single runtime.
 
 ## Verification
 
-The repository contains an OpenGAP passport, a structure-focused fixture, explainability contracts, four framework adapters, and automated adapter tests.
+The repository includes:
 
-OpenGAP validation passed and all four generated framework exports have been exercised successfully.
+- Local adapter verification
+- A domain-specific broken-project fixture
+- OpenGAP-compatible passport metadata
+- Explainability requirements
+- Export verification across the supported targets
 
-## Design principle
+The engineering workflow is:
 
-**Structure is a usability layer.** StructureMedic bases its recommendation on measurable file placement rather than subjective claims about style.
+```text
+Validate passport
+    → Verify adapters
+    → Run diagnostic fixture
+    → Export with OpenGAP
+    → Inspect generated artifacts
+```
 
-## Medic family
+## Scope and limitations
 
-StructureMedic is the project-organization specialist in the Medic family.
+StructureMedic is a focused diagnostic prototype. Its conclusions are limited to the evidence and rules implemented in this repository. It should complement, not replace, production-grade static analysis, security scanners, observability platforms, CI systems, or human review where appropriate.
+
+## Why this project exists
+
+This repository is one member of a deliberately modular **Medic agent family**. Each agent applies the same portable passport architecture to a different engineering failure surface.
+
+That makes the collection useful as an interoperability experiment:
+
+```text
+One passport architecture
+        +
+Different diagnostic domains
+        +
+Multiple agent runtimes
+        =
+Portable engineering-agent family
+```
+
+## Challenge context
+
+Built for the **HiDevs × Lyzr Agent Passport Challenge**, exploring portable agent identity, behavior contracts, explainability, verification, and framework interoperability.
+
+## Author
+
+**Jofil Joby**  
+[GitHub](https://github.com/Jofil-Joby)
