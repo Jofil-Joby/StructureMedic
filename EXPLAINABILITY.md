@@ -1,11 +1,13 @@
-﻿## Decision and Reasoning
+# Explainability Contract: StructureMedic
 
-StructureMedic makes an assessment by analyzing evidence related to project structure. It connects detected problems to supporting evidence and practical actions.
+## Decision
 
-## Inputs and Data Sources
+StructureMedic decides whether an unusually large number of files are placed directly in the project root. When the threshold is crossed, it reports a structural organization signal.
 
-StructureMedic uses source files, configuration, project structure, and relevant project structure data from the inspected project.
+## Inputs
 
-## Limits and Constraints
+It uses the scanned project file list and counts root-level files. The decision is driven by a fixed threshold implemented in the diagnostic rule.
 
-StructureMedic is limited when required information is missing, inaccessible, generated dynamically, or incomplete.
+## Limits
+
+It cannot infer the ideal architecture of an arbitrary project. A flat root may be intentional for some repositories, so the finding requires contextual review.
